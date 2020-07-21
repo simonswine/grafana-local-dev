@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# This is wrapper around docker-compose to allow configuring it with jsonnet
+# easily
+
+set -euo pipefail
+#set -x
+
+SCRIPT_ROOT=$(dirname "${BASH_SOURCE[0]}")
+JSONNET="$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"
+NAME=$(dirname "${JSONNET}"| xargs basename)
+OUTPUT="${SCRIPT_ROOT}/../_run/${NAME}"
+
+# ensure jsonnet is file and exists
+test -f "$JSONNET" || { echo "'${JSONNET}' is not a file" > /dev/stderr ; exit 1 ; }
+
+# TODO verify JSONNET_PATH is set
+
+# check if jsonnet is correct first
+jsonnet "$JSONNET" > /dev/null
+
+# remove existing
+rm -rf "$OUTPUT"
+mkdir -p "$OUTPUT"
+jsonnet -c -m "$OUTPUT" "$JSONNET"
+
+# run docker-compose itself
+shift
+exec docker-compose -f "${OUTPUT}/docker-compose.yaml" "$@"

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "dependencies": [
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/cortex-jsonnet",
+          "subdir": "cortex"
+        }
+      },
+      "version": "145dd43be630d2df3f7985351b6c6082718dc803",
+      "sum": "jSAqcirgYhGq6bHREhkOqX4GQWvZZqsX/sTcP+gVUaQ="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/cortex-jsonnet",
+          "subdir": "cortex-mixin"
+        }
+      },
+      "version": "9de988cf75ce4b6baa63514aee6cc94d1bc07cbc",
+      "sum": "coziJIAadSS3Zpp20bEWY7p+hf98TTnTkN41x7vBYMc="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs",
+          "subdir": "consul"
+        }
+      },
+      "version": "65a623593025007ef54549550a3569c0e72f085d",
+      "sum": "qlVBnIShhHEPglAl1xYIAmOP/W8LD0wQmHCT0m9sTLU="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs",
+          "subdir": "etcd-operator"
+        }
+      },
+      "version": "65a623593025007ef54549550a3569c0e72f085d",
+      "sum": "WMH01sAdeCV6eGqFjEP/va9a1UKikOhRottwsp+ai70="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs",
+          "subdir": "grafana-builder"
+        }
+      },
+      "version": "65a623593025007ef54549550a3569c0e72f085d",
+      "sum": "N65Fv0M2JvFE3GN8ZxP5xh1U5a314ey8geLAioJLzF8="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs",
+          "subdir": "ksonnet-util"
+        }
+      },
+      "version": "5cfd7d731b2a9942916a4f9f2ba6e3c96e82ed7c",
+      "sum": "K5Z/AI/0DbXHtcxOq+NAQ0EqW1onhG5aROAIMtFnYew="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs",
+          "subdir": "memcached"
+        }
+      },
+      "version": "65a623593025007ef54549550a3569c0e72f085d",
+      "sum": "GQeyWFtqhwM+hGxQbdywWG1PFJ/KmSC1at0hai7AHXU="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs",
+          "subdir": "mixin-utils"
+        }
+      },
+      "version": "65a623593025007ef54549550a3569c0e72f085d",
+      "sum": "Je2SxBKu+1WrKEEG60zjSKaY/6TPX8uRz5bsaw0a8oA="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/ksonnet/ksonnet-lib",
+          "subdir": "ksonnet.beta.4"
+        }
+      },
+      "version": "0d2f82676817bbf9e4acf6495b2090205f323b9f",
+      "sum": "ur22hPQq0JAPBxm8hNMcwjumj4MkozDwOKiGZvVMYh4="
+    }
+  ],
+  "legacyImports": false
+}

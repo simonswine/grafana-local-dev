@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec go run github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb "$@"
