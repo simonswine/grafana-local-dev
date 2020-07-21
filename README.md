@@ -12,9 +12,11 @@ This is an initial attempt for local development. It is heavily based on
 
 ## Docker compose environments
 
+* [jsonnet/docker-compose/cortex](./jsonnet/docker-compose/cortex/main.jsonnet)
+
 ```bash
 # jdc is a wrapper around docker-compose and allows to use jsonnet to specify
-# jsonnet and can be used like this
+# docker-compose config and can be used like this
 # jdc <PATH-TO-JSONNET> <DOCKER-COMPOSE COMMANDS>
 
 # Create environment and watch logs
