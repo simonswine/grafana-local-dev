@@ -5,7 +5,8 @@ local cortexMixin = import 'cortex-mixin/mixin.libsonnet';
 
 prometheus.new() +
 grafana.new() +
-cortex.new() + {
+cortex.new() +
+cortex.new(name='cortex1', port=9010) + {
   'docker-compose.yaml'+: {
     version: '3.3',
   },

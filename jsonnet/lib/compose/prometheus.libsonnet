@@ -8,52 +8,69 @@
       scrape_interval: '15s',
       evaluation_interval: '15s',
     },
-    scrape_configs+: [
-      {
-        job_name: 'prometheus',
-        static_configs: [
-          {
-            targets: [
-              'localhost:9090',
+  },
+
+  new(name='prometheus', config=$.config)::
+    local scrape_config = '%s-scrape_configs' % name;
+    {
+      'docker-compose.yaml'+: {
+        services+: {
+          [name]+: {
+            image: $._images.prometheus,
+            ports: [
+              '9090:9090',
+            ],
+            volumes: [
+              './file-%s-config:/etc/prometheus/prometheus.yml:z' % name,
+              '%s-data:/var/lib/prometheus' % name,
             ],
           },
-        ],
-      },
-    ],
-  },
-
-  new(name='prometheus', config=$.config):: {
-    'docker-compose.yaml'+: {
-      services+: {
-        [name]+: {
-          image: $._images.prometheus,
-          ports: [
-            '9090:9090',
-          ],
-          volumes: [
-            './file-%s-config:/etc/prometheus/prometheus.yml:z' % name,
-            '%s-data:/var/lib/prometheus' % name,
-          ],
+        },
+        volumes+: {
+          ['%s-data' % name]+: {},
         },
       },
-      volumes+: {
-        ['%s-data' % name]+: {},
+
+      local this = self,
+      ['file-%s-config' % name]: config {
+        scrape_configs: [
+          this[scrape_config][job] {
+            job_name: job,
+
+          }
+          for job in std.objectFields(this[scrape_config])
+        ],
+      },
+      ['grafana-datasources/%s.yaml' % name]+: {
+        apiVersion: 1,
+        datasources: [{
+          name: name,
+          type: 'prometheus',
+          access: 'proxy',
+          orgId: 1,
+          uid: name,
+          url: 'http://%s:9090' % name,
+        }],
+      },
+    } +
+    $.addScrapeConfig(name, {
+      static_configs: [
+        {
+          targets: [
+            'localhost:9090',
+          ],
+        },
+      ],
+    }, prometheus_name=name)
+  ,
+
+  addScrapeConfig(name, config, prometheus_name='prometheus')::
+    local scrape_config = '%s-scrape_configs' % prometheus_name;
+    {
+      [scrape_config]+:: {
+        [name]+: config,
       },
     },
-    ['file-%s-config' % name]+: config,
-    ['grafana-datasources/%s.yaml' % name]+: {
-      apiVersion: 1,
-      datasources: [{
-        name: name,
-        type: 'prometheus',
-        access: 'proxy',
-        orgId: 1,
-        uid: name,
-        url: 'http://%s:9090' % name,
-      }],
-    },
-  },
-
 
   addRules(name, rules, prometheus_name='prometheus')::
     local filekey = 'file-%s-rules-%s' % [prometheus_name, name];

@@ -1,3 +1,5 @@
+local prometheus = import 'compose/prometheus.libsonnet';
+
 {
   _images+:: {
     cortex: 'cortexproject/cortex:master-77490f99f',
@@ -94,61 +96,58 @@
     config=$.singleProcess,
     namespace='default',
     cluster='cortex',
+    port=9009,
   ):: {
-    'docker-compose.yaml'+: {
-      services+: {
-        [name]+: {
-          image: $._images.cortex,
-          ports: [
-            '9009:9009',
-          ],
-          volumes: [
-            './file-%s-config:/etc/cortex/cortex.yml:z' % name,
-            '%s-data:/tmp/cortex' % name,
-          ],
-          command: [
-            'cortex',
-            '-config.file=/etc/cortex/cortex.yml',
-          ],
+        'docker-compose.yaml'+: {
+          services+: {
+            [name]+: {
+              image: $._images.cortex,
+              ports: [
+                '%d:9009' % port,
+              ],
+              volumes: [
+                './file-%s-config:/etc/cortex/cortex.yml:z' % name,
+                '%s-data:/tmp/cortex' % name,
+              ],
+              command: [
+                'cortex',
+                '-config.file=/etc/cortex/cortex.yml',
+              ],
+            },
+          },
+          volumes+: {
+            ['%s-data' % name]+: {},
+          },
+
         },
-      },
-      volumes+: {
-        ['%s-data' % name]+: {},
-      },
+        ['file-%s-config' % name]+: config,
 
-    },
-    ['file-%s-config' % name]+: config,
-
-    // add scrape config
-    'file-prometheus-config'+: {
-      scrape_configs+: [{
-        job_name: '%s/%s' % [namespace, name],
-        static_configs: [
-          {
+        // add datasource for grafana
+        ['grafana-datasources/%s.yaml' % name]+: {
+          apiVersion: 1,
+          datasources: [{
+            name: name,
+            type: 'prometheus',
+            access: 'proxy',
+            orgId: 1,
+            uid: name,
+            url: 'http://%s:9009/api/prom' % name,
+          }],
+        },
+      } +
+      prometheus.addScrapeConfig(
+        '%s/%s' % [namespace, 'cortex'], {
+          static_configs+: [{
             targets: [
               '%s:9009' % name,
             ],
 
             labels: {
+              instance: name,
               cluster: cluster,
               namespace: namespace,
             },
-          },
-        ],
-      }],
-    },
-
-    // add datasource for grafana
-    ['grafana-datasources/%s.yaml' % name]+: {
-      apiVersion: 1,
-      datasources: [{
-        name: name,
-        type: 'prometheus',
-        access: 'proxy',
-        orgId: 1,
-        uid: name,
-        url: 'http://%s:9009/api/prom' % name,
-      }],
-    },
-  },
+          }],
+        },
+      ),
 }
