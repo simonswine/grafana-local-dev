@@ -5,8 +5,10 @@ local pulsar_adapter = import 'compose/pulsar-adapter.libsonnet';
 local pulsar = import 'compose/pulsar.libsonnet';
 local cortexMixin = import 'cortex-mixin/mixin.libsonnet';
 
+local tls = true;
+
 prometheus.new() +
-pulsar.new() +
+pulsar.new(tls=tls) +
 pulsar_adapter.new() +
 {
   'docker-compose.yaml'+: {
@@ -17,8 +19,20 @@ pulsar_adapter.new() +
       pulsaradapter+: {
         image:: null,
         build: '~/git/github.com/grafana/prometheus-pulsar-remote-write',
-        command: [
-          '--pulsar.url=pulsar://pulsar:6650',
+        command:
+          (if tls then [
+             '--pulsar.url=pulsar+ssl://pulsar:6651',
+             '--pulsar.client-certificate=/certs/client.crt',
+             '--pulsar.client-key=/certs/client.key',
+             '--pulsar.certificate-authority=/certs/ca.crt',
+           ] else [
+             '--pulsar.url=pulsar://pulsar:6650',
+           ]) + [
+            '--log.level=debug',
+          ],
+        user: 'root',
+        volumes+: [
+          'pulsar-cert:/certs',
         ],
       },
     },
