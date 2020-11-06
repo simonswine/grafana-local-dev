@@ -4,7 +4,7 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/cortex-jsonnet",
+          "remote": "https://github.com/grafana/cortex-jsonnet.git",
           "subdir": "cortex"
         }
       },
@@ -14,7 +14,7 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/cortex-jsonnet",
+          "remote": "https://github.com/grafana/cortex-jsonnet.git",
           "subdir": "cortex-mixin"
         }
       },
@@ -24,7 +24,17 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/jsonnet-libs",
+          "remote": "https://github.com/grafana/grafonnet-lib.git",
+          "subdir": "grafonnet"
+        }
+      },
+      "version": "356bd73e4792ffe107725776ca8946895969c191",
+      "sum": "CSMZ3dJrpJpwvffie8BqcfrIVVwiKNqdPEN+1XWRBGU="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "consul"
         }
       },
@@ -34,7 +44,7 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/jsonnet-libs",
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "etcd-operator"
         }
       },
@@ -44,7 +54,7 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/jsonnet-libs",
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "grafana-builder"
         }
       },
@@ -54,7 +64,7 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/jsonnet-libs",
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "ksonnet-util"
         }
       },
@@ -64,7 +74,7 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/jsonnet-libs",
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "memcached"
         }
       },
@@ -74,7 +84,7 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/jsonnet-libs",
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "mixin-utils"
         }
       },
@@ -84,7 +94,7 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/ksonnet/ksonnet-lib",
+          "remote": "https://github.com/ksonnet/ksonnet-lib.git",
           "subdir": "ksonnet.beta.4"
         }
       },
