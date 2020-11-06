@@ -1,6 +1,6 @@
 {
   _images+:: {
-    prometheus: 'prom/prometheus:v2.19.2',
+    prometheus: 'prom/prometheus:v2.22.1',
   },
 
   config:: {
@@ -10,7 +10,7 @@
     },
   },
 
-  new(name='prometheus', config=$.config)::
+  new(name='prometheus', config=$.config, port=9090)::
     local scrape_config = '%s-scrape_configs' % name;
     {
       'docker-compose.yaml'+: {
@@ -18,7 +18,7 @@
           [name]+: {
             image: $._images.prometheus,
             ports: [
-              '9090:9090',
+              '%d:9090' % port,
             ],
             volumes: [
               './file-%s-config:/etc/prometheus/prometheus.yml:z' % name,
