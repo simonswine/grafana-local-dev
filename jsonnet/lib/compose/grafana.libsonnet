@@ -1,7 +1,7 @@
 local prometheus = import 'compose/prometheus.libsonnet';
 {
   _images+:: {
-    grafana: 'grafana/grafana:7.1.0',
+    grafana: 'grafana/grafana:7.3.1',
   },
 
   new(name='grafana')::
@@ -58,4 +58,10 @@ local prometheus = import 'compose/prometheus.libsonnet';
         }],
       },
     ),
+
+  // add dashboard to spec to the correct folder
+  addDashboard(name, dashboard, grafana_name='grafana'):: {
+    ['%s-dashboards/%s.json' % [grafana_name, name]]+:
+      dashboard,
+  },
 }
