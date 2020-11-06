@@ -2,7 +2,7 @@ local prometheus = import 'compose/prometheus.libsonnet';
 
 {
   _images+:: {
-    cortex: 'cortexproject/cortex:master-77490f99f',
+    cortex: 'cortexproject/cortex:v1.5.0-rc.1',
   },
 
   singleProcess:: {
@@ -90,6 +90,84 @@ local prometheus = import 'compose/prometheus.libsonnet';
       },
     },
   },
+
+  blocks::
+    {
+      auth_enabled: false,
+      server: {
+        http_listen_port: 9009,
+        grpc_server_max_recv_msg_size: 104857600,
+        grpc_server_max_send_msg_size: 104857600,
+        grpc_server_max_concurrent_streams: 1000,
+      },
+      distributor: {
+        shard_by_all_labels: true,
+        pool: {
+          health_check_ingesters: true,
+        },
+      },
+      ingester_client: {
+        grpc_client_config: {
+          max_recv_msg_size: 104857600,
+          max_send_msg_size: 104857600,
+          use_gzip_compression: true,
+        },
+      },
+      ingester: {
+        max_transfer_retries: 0,
+        lifecycler: {
+          join_after: 0,
+          min_ready_duration: '0s',
+          final_sleep: '0s',
+          num_tokens: 512,
+          ring: {
+            kvstore: {
+              store: 'inmemory',
+            },
+            replication_factor: 1,
+          },
+        },
+      },
+      storage: {
+        engine: 'blocks',
+      },
+      blocks_storage: {
+        tsdb: {
+          dir: '/tmp/cortex/tsdb',
+        },
+        bucket_store: {
+          sync_dir: '/tmp/cortex/tsdb-sync',
+        },
+        backend: 's3',
+        s3: {
+          bucket_name:
+            'cortex',
+          endpoint:
+            's3.dualstack.us-east-1.amazonaws.com',
+        },
+      },
+      compactor: {
+        data_dir: '/tmp/cortex/compactor',
+        sharding_ring: {
+          kvstore: {
+            store: 'inmemory',
+          },
+        },
+      },
+      frontend_worker: {
+        match_max_concurrent: true,
+      },
+      ruler: {
+        enable_api: true,
+        enable_sharding: false,
+        storage: {
+          type: 'local',
+          'local': {
+            directory: '/tmp/cortex/rules',
+          },
+        },
+      },
+    },
 
   new(
     name='cortex',
