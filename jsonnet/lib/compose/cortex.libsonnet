@@ -175,22 +175,30 @@ local prometheus = import 'compose/prometheus.libsonnet';
     namespace='default',
     cluster='cortex',
     port=9009,
+    log_level=null,
+    scale=1
   ):: {
         'docker-compose.yaml'+: {
           services+: {
             [name]+: {
               image: $._images.cortex,
+              scale: scale,
               ports: [
-                '%d:9009' % port,
+                if port == null then '9009'
+                else '%d:9009' % port,
               ],
               volumes: [
                 './file-%s-config:/etc/cortex/cortex.yml:z' % name,
                 '%s-data:/tmp/cortex' % name,
               ],
               command: [
-                'cortex',
-                '-config.file=/etc/cortex/cortex.yml',
-              ],
+                         'cortex',
+                         '-config.file=/etc/cortex/cortex.yml',
+                       ] +
+                       if log_level == null then
+                         []
+                       else
+                         ['-log.level=%s' % log_level],
             },
           },
           volumes+: {
